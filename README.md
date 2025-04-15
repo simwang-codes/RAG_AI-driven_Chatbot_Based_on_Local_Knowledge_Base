@@ -52,7 +52,15 @@ It allows you to upload documents, process and store them as vector embeddings, 
 
 ```bash
 # 1. Install dependencies
-pip install -r requirements.txt
+pip install fitz PyMuPDF jieba nltk tqdm langdetect keybert sentence-transformers langchain openai langchain-openai faiss-cpu streamlit
 
-# 2. Run the app
-streamlit run app.py
+# 2. Get Your Own OpenAI API Key
+Get your API key at: https://platform.openai.com/docs/overview
+
+# 3. Delete the downloaded vector_index folder, then run the build_faiss.py
+I already did the text chunking/keyword extraction for you in reader.py, so now you have a database in the folder db
+You need to delete the downloaded vector_index folder first, then run python3 build_faiss.py in your terminal to embed the data in db into vectors, and you will get your own vector_index folder with two .faiss files
+
+# 4. Run the app
+You are ready to interact with your Chatbot now! Run: streamlit run app.py
+This RAG Chatbot model was trained with The Count of Monte Cristo written by Alexandre Dumas. Feel free to ask your chatbot any questions related to the story, characters, or anything in this book!
