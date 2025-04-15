@@ -55,6 +55,7 @@ It allows you to upload documents, process and store them as vector embeddings, 
 pip install fitz PyMuPDF jieba nltk tqdm langdetect keybert sentence-transformers langchain openai langchain-openai faiss-cpu streamlit
 
 # 2. Get Your Own OpenAI API Key at: https://platform.openai.com/docs/overview
+# Put your API key in config.py
 
 # 3. Delete the downloaded vector_index folder, then run the build_faiss.py
 # I already did the text chunking/keyword extraction for you in reader.py, so now you have a database in the folder db
