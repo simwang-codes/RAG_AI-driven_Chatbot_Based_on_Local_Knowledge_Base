@@ -4,7 +4,7 @@ import fitz
 import jieba
 import nltk
 import re
-from tqdm import tqdm #用来生成进度条
+from tqdm import tqdm
 from config import DB_PATH
 from langdetect import detect
 from collections import Counter
@@ -12,9 +12,6 @@ from keybert import KeyBERT
 from sentence_transformers import SentenceTransformer
 from langdetect.lang_detect_exception import LangDetectException
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-# 上面的方程教程在：https://python.langchain.com/docs/how_to/recursive_text_splitter/
-
-# Detect file type, if is pdf, then convert to txt, if its txt, then start chunking and keyword tagging, and save to db
 
 def detect_file_type(file):
     file_type = os.path.splitext(file)
@@ -37,7 +34,7 @@ def generate_chinese_tags(text, top_k = 5):
 
 def create_db(db_path=DB_PATH):
     os.makedirs(os.path.dirname(db_path), exist_ok=True)
-    conn = sqlite3.connect(db_path) # Do not pass DB=path into this
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS document(
@@ -74,13 +71,12 @@ def file_to_db(file, db_path = DB_PATH):
     chunks = split_text_into_chunks(text)
     print(f"Text split into {len(chunks)} chunks")
 
-# 是中文就用中文版方案一的方式，是英文就用后来的方式
     tags_list = []
-    for chunk in tqdm(chunks, desc = "Extracting tags"): #这种for loop 语句是用来生成progress bar的
+    for chunk in tqdm(chunks, desc = "Extracting tags"):
         chunk = chunk.strip()
         
         if not chunk:
-            tags_list.append([])  # Optional: store empty tags for empty chunk
+            tags_list.append([])
             continue
 
         try:
@@ -98,8 +94,6 @@ def file_to_db(file, db_path = DB_PATH):
             tags = [kw for kw, _ in keywords]
 
         tags_list.append(tags)
-        
-# 然后存入数据库！
 
     conn = create_db(db_path)
     cursor = conn.cursor()
