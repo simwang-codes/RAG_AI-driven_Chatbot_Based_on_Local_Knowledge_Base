@@ -7,11 +7,10 @@ from tqdm import tqdm
 from config import DB_PATH, OPENAI_API_KEY
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
-from langchain.schema import Document # 当在未来处理多个documents时，给每个chunk添加metadata, 方便辨识
+from langchain.schema import Document
 
-os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY # This is an environment variable, it allows LangChain and OpenAI's python SDK to look for the API key in this environment
-
-embedding_model = OpenAIEmbeddings() # Creates an embedding model wrapper in LangChain that uses OpenAI's text-embedding models
+os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY 
+embedding_model = OpenAIEmbeddings()
 
 def load_all_from_db(db_path = DB_PATH):
     conn = sqlite3.connect(db_path)
@@ -33,7 +32,7 @@ def load_all_from_db(db_path = DB_PATH):
 
 def build_faiss_index(document, save_path = "vector_index"):
     print("Vectorizing contents...")
-    vector_store = FAISS.from_documents(document, embedding_model) # Here I used OpenAI model
+    vector_store = FAISS.from_documents(document, embedding_model)
 
     os.makedirs(save_path, exist_ok=True)
     vector_store.save_local(save_path)
