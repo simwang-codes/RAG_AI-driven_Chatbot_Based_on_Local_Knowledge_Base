@@ -4,7 +4,7 @@
 import os
 import langid
 from config import DB_PATH, OPENAI_API_KEY
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI # ChatOpenAI 是用来根据提供的prompt回答user input问题的
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_community.vectorstores import FAISS
 from langdetect import detect
 from langchain.schema import Document
@@ -15,18 +15,14 @@ embedding_model = OpenAIEmbeddings()
 def load_vector_storage(path="vector_index"):
     return FAISS.load_local(path,embedding_model, allow_dangerous_deserialization=True)
 
-# k=5 means retrieve the top 5 similair chunks
 def search_similar_chunks(query, k=5):
     vector_store = load_vector_storage()
     return vector_store.similarity_search(query, k=k)
 
-# Originally, I used LangChain's detect method to identify the user's language, but it misrecognized Chinese as Korean,
-# so I switched to langid, which is a more accurate language identifier.
-
 def detect_language(text):
     try:
         lang, _ = langid.classify(text)
-        return lang  # e.g., "zh", "en", "ko", etc.
+        return lang
     except:
         return "unknown"
 
